@@ -8,6 +8,7 @@ from .cfg import cfg,wx_cfg
 from core.print import print_error,print_info
 from core.rss import RSS
 from driver.success import setStatus
+from core.log import logger
 import random
 # 定义一些常见的 User-Agent
 USER_AGENTS = [
@@ -180,12 +181,20 @@ class WxGather:
     
     
     def Start(self,mp_id=None):
+        """
+        开始同步公众号文章
+        
+        Args:
+            mp_id: 公众号ID
+        """
         self.articles=[]
         self.get_token()
         if self.token=="" or self.token is None:
+             logger.error(f"[文章获取] 同步开始失败 - 公众号ID: {mp_id}, 原因: 未登录公众号平台")
              self.Error("请先扫码登录公众号平台")
              return
         import time
+        logger.info(f"[文章获取] 开始同步流程 - 公众号ID: {mp_id}, token: {self.token[:20]}...")
         self.update_mps(mp_id,Feed(
           sync_time=int(time.time()),
           update_time=int(time.time()),
@@ -202,8 +211,17 @@ class WxGather:
             CallBack(item)
         pass
     def Error(self,error:str,code=None):
+        """
+        处理同步过程中的错误
+        
+        Args:
+            error: 错误信息
+            code: 错误代码
+        """
+        logger.error(f"[文章获取] 同步过程发生错误 - 错误信息: {error}, 错误代码: {code}, 已获取文章数: {len(self.articles) if hasattr(self, 'articles') else 0}")
         self.Over()
         if code=="Invalid Session":
+            logger.critical(f"[文章获取] 登录会话失效 - 需要重新登录公众号平台")
             from jobs.failauth import send_wx_code
             import threading
             setStatus(False)
@@ -215,15 +233,27 @@ class WxGather:
         # raise Exception(error)
 
     def Over(self,CallBack=None):
+        """
+        同步完成回调
+        
+        Args:
+            CallBack: 完成回调函数
+        """
         if getattr(self, 'articles', None) is not None:
-            print(f"成功{len(self.articles)}条")
+            article_count = len(self.articles)
+            logger.info(f"[文章获取] 同步完成 - 成功获取文章数: {article_count}")
+            print(f"成功{article_count}条")
             rss=RSS()
             mp_id=""
             try:
                 mp_id=self.articles[0]['mp_id']
+                logger.info(f"[文章获取] 清理RSS缓存 - 公众号ID: {mp_id}")
             except:
+                logger.warning(f"[文章获取] 无法获取公众号ID，跳过缓存清理")
                 pass
             rss.clear_cache(mp_id=mp_id)  
+        else:
+            logger.warning(f"[文章获取] 同步完成但没有文章列表")
         if CallBack is not None:
             CallBack(self.articles)
 
@@ -248,7 +278,10 @@ class WxGather:
         from datetime import datetime
         import time
         try:
-            
+            if mp_id is None or mp_id == "":
+                logger.warning(f"[更新公众号状态] 公众号ID为空，跳过更新")
+                return
+                
             # 更新同步时间为当前时间
             current_time = int(time.time())
             update_data = {
@@ -263,20 +296,28 @@ class WxGather:
             if hasattr(mp,'status') and mp.status is not None:
                 update_data['status']=mp.status
 
+            logger.debug(f"[更新公众号状态] 准备更新公众号状态 - 公众号ID: {mp_id}, 更新数据: {update_data}")
+
             # 获取数据库会话并执行更新
             session = DB.get_session()
             try:
                 feed = session.query(Feed).filter(Feed.id == mp_id).first()
                 if feed:
                     for key, value in update_data.items():
+                        logger.debug(f"[更新公众号状态] 更新公众号{mp_id}的{key}为{value}")
                         print(f"更新公众号{mp_id}的{key}为{value}")
                         setattr(feed, key, value)
                     session.commit()
+                    logger.info(f"[更新公众号状态] 成功更新公众号状态 - 公众号ID: {mp_id}, 公众号名称: {feed.mp_name if hasattr(feed, 'mp_name') else '未知'}")
                 else:
+                    logger.error(f"[更新公众号状态] 未找到ID为{mp_id}的公众号记录")
                     print_error(f"未找到ID为{mp_id}的公众号记录")
             finally:
                 pass
                 
         except Exception as e:
+            import traceback
+            logger.error(f"[更新公众号状态] 更新公众号状态失败 - 公众号ID: {mp_id}, 错误: {str(e)}")
+            logger.error(f"[更新公众号状态] 错误堆栈: {traceback.format_exc()}")
             print_error(f"更新公众号状态失败: {e}")
             raise NotImplementedError(f"更新公众号状态失败:{str(e)}")

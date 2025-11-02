@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from .base import WxGather
 from core.print import print_error
 from core.log import logger
+import traceback
 # 继承 BaseGather 类
 class MpsAppMsg(WxGather):
 
