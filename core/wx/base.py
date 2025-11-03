@@ -152,7 +152,8 @@ class WxGather:
             "ajax": "1"
         }
         headers=self.fix_header(url)
-        if self.token is None or self.token == "":
+        # 检查token是否有效（可能是字符串或整数）
+        if self.token is None or (isinstance(self.token, str) and self.token == "") or (isinstance(self.token, int) and self.token == 0):
             self.Error("请先扫码登录公众号平台")
             return
         data={}
@@ -189,12 +190,15 @@ class WxGather:
         """
         self.articles=[]
         self.get_token()
-        if self.token=="" or self.token is None:
-             logger.error(f"[文章获取] 同步开始失败 - 公众号ID: {mp_id}, 原因: 未登录公众号平台")
+        # 检查token是否有效（可能是字符串或整数）
+        if self.token is None or (isinstance(self.token, str) and self.token == "") or (isinstance(self.token, int) and self.token == 0):
+             logger.error(f"[文章获取] 同步开始失败 - 公众号ID: {mp_id}, 原因: 未登录公众号平台, token类型: {type(self.token).__name__}, token值: {self.token}")
              self.Error("请先扫码登录公众号平台")
              return
         import time
-        logger.info(f"[文章获取] 开始同步流程 - 公众号ID: {mp_id}, token: {self.token[:20]}...")
+        # 安全地格式化token用于日志显示
+        token_str = str(self.token)[:20] if isinstance(self.token, str) else str(self.token)
+        logger.info(f"[文章获取] 开始同步流程 - 公众号ID: {mp_id}, token: {token_str}...")
         self.update_mps(mp_id,Feed(
           sync_time=int(time.time()),
           update_time=int(time.time()),
