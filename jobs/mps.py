@@ -58,7 +58,7 @@ def do_job(mp=None,task:MessageTask=None):
         logger.info(f"[公众号同步] 开始同步公众号 - 任务ID: {task_id}, 公众号ID: {mp_id}, 公众号名称: {mp_name}, 开始时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
         # 检查缓存：如果该公众号近N小时已有文章，则跳过同步
-        sync_cache_hours = int(cfg.get("sync.cache_hours", 6))  # 默认6小时
+        sync_cache_hours = int(cfg.get("sync.cache_hours", 8))  # 默认8小时
         if sync_cache_hours > 0:
             try:
                 from core.models.article import Article
