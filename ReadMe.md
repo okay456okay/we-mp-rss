@@ -172,6 +172,7 @@ The following are the environment variable configurations supported in `config.y
 | `SECRET_KEY` | `we-mp-rss` | Secret key |
 | `USER_AGENT` | `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36/WeRss` | User agent |
 | `SPAN_INTERVAL` | `10` | Scheduled task execution interval (seconds) |
+| `SYNC_CACHE_HOURS` | `6` | Sync cache time (hours). If an account has articles within the specified time, skip sync. Set to 0 to disable cache |
 | `WEBHOOK.CONTENT_FORMAT` | `html` | Article content sending format |
 | `PORT` | `8001` | API service port |
 | `DEBUG` | `False` | Debug mode |

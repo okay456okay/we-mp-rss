@@ -57,6 +57,35 @@ def do_job(mp=None,task:MessageTask=None):
         
         logger.info(f"[公众号同步] 开始同步公众号 - 任务ID: {task_id}, 公众号ID: {mp_id}, 公众号名称: {mp_name}, 开始时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
+        # 检查缓存：如果该公众号近N小时已有文章，则跳过同步
+        sync_cache_hours = int(cfg.get("sync.cache_hours", 6))  # 默认6小时
+        if sync_cache_hours > 0:
+            try:
+                from core.models.article import Article
+                from core.models.base import DATA_STATUS
+                import time as time_module
+                
+                current_time = int(time_module.time())
+                cache_time_threshold = current_time - (sync_cache_hours * 3600)  # 转换为秒
+                
+                session = db.DB.get_session()
+                # 查询该公众号在指定时间范围内是否有文章
+                recent_article = session.query(Article).filter(
+                    Article.mp_id == mp_id,
+                    Article.publish_time >= cache_time_threshold,
+                    Article.status == DATA_STATUS.ACTIVE
+                ).order_by(Article.publish_time.desc()).first()
+                
+                if recent_article:
+                    logger.info(f"[公众号同步] 跳过同步 - 公众号: {mp_name}, 公众号ID: {mp_id}, 原因: 近{sync_cache_hours}小时内已有文章 (最新文章发布时间: {datetime.fromtimestamp(recent_article.publish_time).strftime('%Y-%m-%d %H:%M:%S')})")
+                    print_success(f"任务({task_id})[{mp_name}]跳过同步，近{sync_cache_hours}小时内已有文章")
+                    return
+                else:
+                    logger.debug(f"[公众号同步] 继续同步 - 公众号: {mp_name}, 公众号ID: {mp_id}, 近{sync_cache_hours}小时内无文章")
+            except Exception as e:
+                logger.warning(f"[公众号同步] 缓存检查失败，继续同步 - 公众号: {mp_name}, 错误: {str(e)}")
+                # 缓存检查失败不影响同步流程，继续执行
+        
         all_count=0
         wx=WxGather().Model()
         success = False

@@ -174,6 +174,7 @@ http://localhost:3000
 | `SECRET_KEY` | `we-mp-rss` | 密钥 |
 | `USER_AGENT` | `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36/WeRss` | 用户代理 |
 | `SPAN_INTERVAL` | `10` | 定时任务执行间隔（秒） |
+| `SYNC_CACHE_HOURS` | `6` | 同步缓存时间（小时），如果公众号在指定时间内已有文章，则跳过同步。设置为0则禁用缓存 |
 | `WEBHOOK.CONTENT_FORMAT` | `html` | 文章内容发送格式 |
 | `PORT` | `8001` | API服务端口 |
 | `DEBUG` | `False` | 调试模式 |
@@ -220,6 +221,12 @@ http://localhost:3000
 
 - **如何调整定时任务间隔？**
   修改 `config.yaml` 中的 `interval` 或通过环境变量 `SPAN_INTERVAL` 设置。
+
+- **如何配置同步缓存？**
+  修改 `config.yaml` 中的 `sync.cache_hours` 或通过环境变量 `SYNC_CACHE_HOURS` 设置。
+  - 默认值为6小时，表示如果公众号在近6小时内已有文章，则跳过同步
+  - 一般公众号一天更新不会超过3次，设置6小时可以避免频繁同步，减少不必要的API请求
+  - 设置为0则禁用缓存，每次都会执行同步
 
 - **如何开启定时任务？**
   1、修改 `config.yaml` 中的 `ENABLE_JOB` 或通过环境变量 `ENABLE_JOB` 设置 为True。

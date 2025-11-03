@@ -34,6 +34,12 @@ user_agent: ${USER_AGENT:-Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 #定时任务执行每篇稿件间隔时间 单位秒 默认10s 允许值 1-60秒之间
 interval: ${SPAN_INTERVAL:- 10}
 
+#同步缓存配置
+sync:
+  # 缓存时间（小时），如果公众号在指定时间内已有文章，则跳过同步。默认6小时，设置为0则禁用缓存
+  # 一般公众号一天更新不会超过3次，设置6小时可以避免频繁同步
+  cache_hours: ${SYNC_CACHE_HOURS:-6}
+
 webhook:
   #文章内容的发送格式(默认使用html格式，可选text、markdown)
   content_format: ${WEBHOOK.CONTENT_FORMAT:-html}
