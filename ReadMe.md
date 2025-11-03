@@ -166,7 +166,7 @@ The following are the environment variable configurations supported in `config.y
 | `THREADS` | `2` | Maximum number of threads |
 | `DB` | `sqlite:///data/db.db` | Database connection string |
 | `DINGDING_WEBHOOK` | Empty | DingTalk notification webhook URL |
-| `WECHAT_WEBHOOK` | Empty | WeChat notification webhook URL |
+| `WECHAT_WEBHOOK` | Empty | WeChat Work group bot webhook URL (format: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxx). The system automatically identifies the notification type based on the webhook URL |
 | `FEISHU_WEBHOOK` | Empty | Feishu notification webhook URL |
 | `CUSTOM_WEBHOOK` | Empty | Custom notification webhook URL |
 | `SECRET_KEY` | `we-mp-rss` | Secret key |

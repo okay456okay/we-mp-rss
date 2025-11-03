@@ -23,8 +23,9 @@ db: ${DB:-sqlite:///data/db.db}
 #通知
 notice:
   #通知方式，可选dingding、wechat、feishu、custom
+  #系统会根据webhook地址自动识别通知类型（企微群机器人、钉钉、飞书等）
   dingding: "${DINGDING_WEBHOOK}"
-  wechat: "${WECHAT_WEBHOOK}"
+  wechat: "${WECHAT_WEBHOOK}"  # 企微群机器人webhook地址，格式：https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxx
   feishu: "${FEISHU_WEBHOOK}"
   custom: "${CUSTOM_WEBHOOK}"
   

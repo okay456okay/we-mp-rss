@@ -115,6 +115,53 @@ def do_job(mp=None,task:MessageTask=None):
             else:
                 logger.warning(f"[公众号同步] 同步异常完成 - 公众号: {mp_name}, 公众号ID: {mp_id}, 任务ID: {task_id}, 获取文章数: {count}, 耗时: {duration:.2f}秒, 错误: {error_msg}")
             
+            # 如果同步失败，发送通知
+            if not success and error_msg:
+                try:
+                    from core.notice import notice
+                    from core.config import cfg
+                    
+                    # 获取配置的通知webhook地址
+                    notice_config = cfg.get('notice', {})
+                    webhook_urls = []
+                    
+                    # 收集所有配置的webhook地址
+                    if notice_config.get('dingding'):
+                        webhook_urls.append(notice_config['dingding'])
+                    if notice_config.get('wechat'):
+                        webhook_urls.append(notice_config['wechat'])
+                    if notice_config.get('feishu'):
+                        webhook_urls.append(notice_config['feishu'])
+                    if notice_config.get('custom'):
+                        webhook_urls.append(notice_config['custom'])
+                    
+                    # 发送失败通知到所有配置的webhook
+                    if webhook_urls:
+                        error_title = f"公众号同步失败 - {mp_name}"
+                        error_text = f"""### 公众号同步失败通知
+
+**公众号名称**: {mp_name}
+**公众号ID**: {mp_id}
+**任务ID**: {task_id}
+**错误信息**: {error_msg}
+**获取文章数**: {count}
+**耗时**: {duration:.2f}秒
+**失败时间**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+请检查公众号配置或网络连接是否正常。"""
+                        
+                        for webhook_url in webhook_urls:
+                            try:
+                                # notice函数会自动根据webhook地址识别通知类型（钉钉、企微、飞书等）
+                                notice(webhook_url, error_title, error_text)
+                                logger.info(f"[公众号同步] 失败通知已发送 - 公众号: {mp_name}, webhook: {webhook_url[:50]}...")
+                            except Exception as e:
+                                logger.error(f"[公众号同步] 发送失败通知失败 - 公众号: {mp_name}, webhook: {webhook_url[:50]}..., 错误: {str(e)}")
+                    else:
+                        logger.debug(f"[公众号同步] 未配置通知webhook，跳过发送失败通知 - 公众号: {mp_name}")
+                except Exception as e:
+                    logger.error(f"[公众号同步] 发送失败通知异常 - 公众号: {mp_name}, 错误: {str(e)}")
+            
             try:
                 from jobs.webhook import MessageWebHook 
                 tms=MessageWebHook(task=task,feed=mp,articles=wx.articles)
