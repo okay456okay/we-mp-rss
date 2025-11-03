@@ -119,7 +119,7 @@ def do_job(mp=None,task:MessageTask=None):
             if not success and error_msg:
                 try:
                     from core.notice import notice
-                    from core.config import cfg
+                    # cfg已在文件顶部导入，无需重复导入
                     
                     # 获取配置的通知webhook地址
                     notice_config = cfg.get('notice', {})
