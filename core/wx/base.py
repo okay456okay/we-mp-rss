@@ -220,12 +220,19 @@ class WxGather:
         
         Args:
             error: 错误信息
-            code: 错误代码
+            code: 错误代码类型，可能的值：
+                - "Invalid Session": 登录会话失效（200003），需要清空队列
+                - "ApiError": API错误（如200002等），只跳过当前公众号
+                - "FrequencyControl": 频率限制（200013），只跳过当前公众号
+                - None: 其他错误，只跳过当前公众号
         """
         logger.error(f"[文章获取] 同步过程发生错误 - 错误信息: {error}, 错误代码: {code}, 已获取文章数: {len(self.articles) if hasattr(self, 'articles') else 0}")
         self.Over()
+        
+        # 只有真正的登录会话失效（200003）才清空队列
+        # 其他错误（如200002 invalid args）只跳过当前公众号，继续处理队列中的其他任务
         if code=="Invalid Session":
-            logger.critical(f"[文章获取] 登录会话失效 - 需要重新登录公众号平台")
+            logger.critical(f"[文章获取] 登录会话失效 - 需要重新登录公众号平台，清空队列")
             from jobs.failauth import send_wx_code
             import threading
             setStatus(False)
@@ -234,7 +241,10 @@ class WxGather:
             threading.Thread(target=send_wx_code,args=(f"公众号平台登录失效,请重新登录",)).start()
             # send_wx_code(f"公众号平台登录失效,请重新登录")
             raise Exception(error)
-        # raise Exception(error)
+        else:
+            # 其他错误（ApiError、FrequencyControl等）只跳过当前公众号，不清空队列
+            logger.warning(f"[文章获取] 跳过当前公众号，继续处理队列中的其他任务 - 错误: {error}, 错误代码: {code}")
+            raise Exception(error)
 
     def Over(self,CallBack=None):
         """

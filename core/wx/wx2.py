@@ -102,38 +102,46 @@ class MpsWeb(WxGather):
             time.sleep(sleep_time)
             try:
                 headers = self.fix_header(url)
-                logger.debug(f"[文章获取-Web模式] 发送请求 - 公众号: {Mps_title}, URL: {url}, 参数: begin={begin}, fakeid={faker_id}")
+                # 记录请求详细信息
+                logger.debug(f"[文章获取-Web模式] 发送请求 - 公众号: {Mps_title}, URL: {url}, 参数: {params}")
                 resp = session.get(url, headers=headers, params = params, verify=False)
                 
                 msg = resp.json()
-                logger.debug(f"[文章获取-Web模式] 收到响应 - 公众号: {Mps_title}, ret: {msg.get('base_resp', {}).get('ret', 'unknown')}")
                 self._cookies =resp.cookies
+                
+                # 记录响应详细信息
+                ret_code = msg.get('base_resp', {}).get('ret', 'unknown')
+                err_msg = msg.get('base_resp', {}).get('err_msg', '')
+                logger.debug(f"[文章获取-Web模式] 收到响应 - 公众号: {Mps_title}, ret: {ret_code}, err_msg: {err_msg}, 状态码: {resp.status_code}")
+                
+                # 如果返回错误，记录完整的请求和响应信息
+                if ret_code != 0:
+                    logger.error(f"[文章获取-Web模式] API返回错误 - 公众号: {Mps_title}, 请求URL: {url}")
+                    logger.error(f"[文章获取-Web模式] 请求参数: {params}")
+                    logger.error(f"[文章获取-Web模式] 响应内容: {msg}")
+                    logger.error(f"[文章获取-Web模式] HTTP状态码: {resp.status_code}")
+                
                 # 流量控制了, 退出
-                if msg['base_resp']['ret'] == 200013:
+                if ret_code == 200013:
                     logger.error(f"[文章获取-Web模式] 触发频率限制 - 公众号: {Mps_title}, 在页码 {begin} 处停止")
-                    super().Error("frequencey control, stop at {}".format(str(begin)))
+                    super().Error("frequencey control, stop at {}".format(str(begin)), code="FrequencyControl")
                     break
                 
-                if msg['base_resp']['ret'] == 200003:
+                if ret_code == 200003:
                     logger.error(f"[文章获取-Web模式] 登录会话失效 - 公众号: {Mps_title}, 在页码 {begin} 处停止")
                     super().Error("Invalid Session, stop at {}".format(str(begin)),code="Invalid Session")
                     break
-                if msg['base_resp']['ret'] != 0:
-                    error_msg = msg['base_resp'].get('err_msg', '未知错误')
-                    error_code = msg['base_resp']['ret']
-                    logger.error(f"[文章获取-Web模式] API返回错误 - 公众号: {Mps_title}, 错误原因: {error_msg}, 错误代码: {error_code}")
-                    super().Error("错误原因:{}:代码:{}".format(error_msg, error_code),code="Invalid Session")
+                if ret_code != 0:
+                    # 200002 (invalid args) 等错误不应该清空队列，只跳过当前公众号
+                    # 只有200003才是真正的Invalid Session
+                    error_code_str = "Invalid Session" if ret_code == 200003 else "ApiError"
+                    logger.error(f"[文章获取-Web模式] API返回错误 - 公众号: {Mps_title}, 错误原因: {err_msg}, 错误代码: {ret_code}")
+                    super().Error("错误原因:{}:代码:{}".format(err_msg, ret_code), code=error_code_str)
                     break    
                 # 如果返回的内容中为空则结束
                 if 'publish_page' not in msg:
                     logger.info(f"[文章获取-Web模式] 没有更多文章 - 公众号: {Mps_title}, 在页码 {begin} 处停止")
                     super().Error("all ariticle parsed")
-                    break
-                if msg['base_resp']['ret'] != 0:
-                    error_msg = msg['base_resp'].get('err_msg', '未知错误')
-                    error_code = msg['base_resp']['ret']
-                    logger.error(f"[文章获取-Web模式] API返回错误 - 公众号: {Mps_title}, 错误原因: {error_msg}, 错误代码: {error_code}")
-                    super().Error("错误原因:{}:代码:{}".format(error_msg, error_code))
                     break  
                 if "publish_page" in msg:
                     msg["publish_page"]=json.loads(msg['publish_page'])
