@@ -1,61 +1,73 @@
-<div align=center>
-<img src="static/logo.svg" alt="We-MP-RSS Logo" width="20%">
-<h1>WeRSS - WeChat Official Account RSS Subscription Assistant</h1>
+# WeRSS - WeChat Official Account RSS Subscription Assistant
+
+<img src="static/logo.svg" alt="We-MP-RSS Logo" width="200">
 
 [![Python Version](https://img.shields.io/badge/python-3.13.1+-red.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
-[中文](README.zh-CN.md)|[English](ReadMe.md)
+[中文](README.zh-CN.md) | [English](ReadMe.md)
 
-Quick Start
-```
-docker run -d  --name we-mp-rss  -p 8001:8001 -v ./data:/app/data  ghcr.io/rachelos/we-mp-rss:latest
-```
-Visit http://<your-ip>:8001/ to get started
+---
 
-# Quick Upgrade 
+## 📢 Update Notice
 
+This repository is cloned from [https://github.com/rachelos/we-mp-rss](https://github.com/rachelos/we-mp-rss), with the following improvements based on the original functionality:
+
+- ✅ **Fixed issues with some accounts not updating**: Optimized synchronization mechanism to improve update success rate
+- ✅ **Added update error notifications**: Automatically sends notifications when synchronization fails to promptly identify issues
+- ✅ **Multiple notification methods supported**: Supports WeChat Work group bots, DingTalk, Feishu, and other notification channels
+- ✅ **Fixed critical bugs**: Resolved multiple critical issues affecting stability
+
+---
+
+## 📮 Contact
+
+If you have any questions or suggestions, please contact us through the following methods:
+
+- Create a [GitHub Issue](https://github.com/okay456okay/nof1.ai.monitor/issues)
+- X (Twitter): [@okay456okay](https://x.com/okay456okay)
+- WeChat Official Account: 远见拾贝
+- Website: [远见拾贝 - 用远见洞察，赚确定性的钱](https://www.insightpearl.com/)
+
+<img src="https://github.com/okay456okay/nof1.ai.monitor/raw/main/images/InSightPearl21_qrcode.jpg" alt="远见拾贝公众号二维码" width="150" height="150">
+
+---
+
+## Quick Start
+
+```bash
+docker run -d --name we-mp-rss -p 8001:8001 -v ./data:/app/data ghcr.io/rachelos/we-mp-rss:latest
 ```
+
+Visit `http://<your-ip>:8001/` to get started
+
+## Quick Upgrade
+
+```bash
 docker stop we-mp-rss
 docker rm we-mp-rss
 docker pull ghcr.io/rachelos/we-mp-rss:latest
 # If you added other parameters, please modify accordingly
-docker run -d  --name we-mp-rss  -p 8001:8001 -v ./data:/app/data  ghcr.io/rachelos/we-mp-rss:latest
+docker run -d --name we-mp-rss -p 8001:8001 -v ./data:/app/data ghcr.io/rachelos/we-mp-rss:latest
 ```
 
-# Official Image
-```
-docker run -d  --name we-mp-rss  -p 8001:8001 -v ./data:/app/data  rachelos/we-mp-rss:latest
-```
-# Proxy Mirror for Faster Access (Faster access in China)
-```
-docker run -d  --name we-mp-rss  -p 8001:8001 -v ./data:/app/data  docker.1ms.run/rachelos/we-mp-rss:latest  
+## Official Image
+
+```bash
+docker run -d --name we-mp-rss -p 8001:8001 -v ./data:/app/data rachelos/we-mp-rss:latest
 ```
 
-# Special Thanks (In no particular order)
+## Proxy Mirror for Faster Access (Faster access in China)
+
+```bash
+docker run -d --name we-mp-rss -p 8001:8001 -v ./data:/app/data docker.1ms.run/rachelos/we-mp-rss:latest
+```
+
+## Special Thanks (In no particular order)
+
 cyChaos, 子健MeLift, 晨阳, 童总, 胜宇, 军亮, 余光, 一路向北, 水煮土豆丝, 人可, 须臾, 澄明, 五梭
 
-
-
- <br/>
- <img src="https://github.com/user-attachments/assets/cbe924f2-d8b0-48b0-814e-7c06ccb1911c" height="60" />
-    <img src="https://github.com/user-attachments/assets/6997a236-3df3-49d5-98a4-514f6d1a02c4" height="60" />
-    <br />
-    <br />
-    <a href="https://github.com/RSSNext/Folo/stargazers"><img src="https://img.shields.io/github/stars/RSSNext/Follow?color=ffcb47&labelColor=black&style=flat-square&logo=github&label=Stars" /></a>
-    <a href="https://github.com/RSSNext/Folo/graphs/contributors"><img src="https://img.shields.io/github/contributors/RSSNext/Folo?style=flat-square&logo=github&label=Contributors&labelColor=black" /></a>
-    <a href="https://status.follow.is/" target="_blank"><img src="https://status.follow.is/api/badge/18/uptime?color=%2344CC10&labelColor=black&style=flat-square"/></a>
-    <a href="https://github.com/RSSNext/Folo/releases"><img src="https://img.shields.io/github/downloads/RSSNext/Folo/total?color=369eff&labelColor=black&logo=github&style=flat-square&label=Downloads" /></a>
-    <a href="https://x.com/intent/follow?screen_name=folo_is"><img src="https://img.shields.io/badge/Follow-blue?color=1d9bf0&logo=x&labelColor=black&style=flat-square" /></a>
-    <a href="https://discord.gg/followapp" target="_blank"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2Ffollowapp%3Fwith_counts%3Dtrue&query=approximate_member_count&color=5865F2&label=Discord&labelColor=black&logo=discord&logoColor=white&style=flat-square"/></a>
-    <br />
 A tool for subscribing to and managing WeChat Official Account content, providing RSS subscription functionality.
-</div>
-<p align="center">
-  <a href="https://github.com/DIYgod/sponsors">
-    <img src="https://raw.githubusercontent.com/DIYgod/sponsors/main/sponsors.wide.svg" />
-  </a>
-</p>
 
 ## Features
 
@@ -73,84 +85,112 @@ A tool for subscribing to and managing WeChat Official Account content, providin
 - Export to md/docx/pdf/json formats
 - API interface and WebHook support
 
+## ❤️ Sponsorship
 
-# ❤️ Sponsorship
-If you find We-MP-RSS helpful, feel free to buy me a beer!<br/>
-<img src="docs/赞赏码.jpg" width=180/>
+If you find We-MP-RSS helpful, feel free to buy me a beer!
+
+<img src="docs/赞赏码.jpg" width="180" alt="Sponsor QR Code"/>
+
 [Paypal](https://www.paypal.com/ncp/payment/PUA72WYLAV5KW)
 
 ## Screenshots
-- Login Interface  
-<img src="docs/登录.png" alt="Login" width="80%"/><br/>
-- Main Interface  
-<img src="docs/主界面.png" alt="Main Interface" width="80%"/><br/>
-- QR Code Authorization  
-<img src="docs/扫码授权.png" alt="QR Code Authorization" width="80%"/><br/>
-- Add Subscription  
-<img src="docs/添加订阅.png" alt="Add Subscription" width="80%"/><br/>
 
-- Client Application<br/>
-<img src="docs/folo.webp" alt="FOLO Client Application" width="80%"/><br/>
+- **Login Interface**
+
+<img src="docs/登录.png" alt="Login" width="80%"/>
+
+- **Main Interface**
+
+<img src="docs/主界面.png" alt="Main Interface" width="80%"/>
+
+- **QR Code Authorization**
+
+<img src="docs/扫码授权.png" alt="QR Code Authorization" width="80%"/>
+
+- **Add Subscription**
+
+<img src="docs/添加订阅.png" alt="Add Subscription" width="80%"/>
+
+- **Client Application**
+
+<img src="docs/folo.webp" alt="FOLO Client Application" width="80%"/>
 
 
 
 ## System Architecture
 
 The project adopts a front-end and back-end separation architecture:
+
 - Backend: Python + FastAPI
 - Frontend: Vue 3 + Vite
 - Database: SQLite (default)/MySQL
+
 <img src="docs/架构原理.png" alt="Architecture Diagram" width="80%"/>
 
 For more project principles, please refer to the [Project Documentation](https://deepwiki.com/rachelos/we-mp-rss/3.5-notification-system).
 
 ## Installation Guide
 
-# Development
-## Environment Requirements
+### Development
+
+#### Environment Requirements
+
 - Python>=3.13.1
 - Node>=20.18.3
-### Backend Service
+
+#### Backend Service
 
 1. Clone the project
+
 ```bash
 git clone https://github.com/rachelos/we-mp-rss.git
 cd we-mp-rss
 ```
 
 2. Install Python dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 3. Configure database
+
 Copy and modify the configuration file:
+
 ```bash
 cp config.example.yaml config.yaml
+# Windows system use
 copy config.example.yaml config.yaml
 ```
-3. Start the service
+
+4. Start the service
+
 ```bash
 python main.py -job True -init True
 ```
 
-## Frontend Development
+#### Frontend Development
+
 1. Install frontend dependencies
+
 ```bash
 cd we-mp-rss/web_ui
 yarn install
 ```
 
 2. Start frontend service
+
 ```bash
 yarn dev
 ```
+
 3. Access frontend page
+
 ```
 http://localhost:3000
 ```
 
-# Environment Variable Configuration
+## Environment Variable Configuration
 
 The following are the environment variable configurations supported in `config.yaml`:
 

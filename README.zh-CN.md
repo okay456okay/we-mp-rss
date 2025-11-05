@@ -1,63 +1,73 @@
-<div align=center>
-<img src="static/logo.svg" alt="We-MP-RSS Logo" width="20%">
-<h1>WeRSS - 微信公众号订阅助手</h1>
+# WeRSS - 微信公众号订阅助手
+
+<img src="static/logo.svg" alt="We-MP-RSS Logo" width="200">
 
 [![Python Version](https://img.shields.io/badge/python-3.13.1+-red.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
-[中文](README.zh-CN.md)|[English](ReadMe.md)
+[中文](README.zh-CN.md) | [English](ReadMe.md)
 
-快速运行
-```
-docker run -d  --name we-mp-rss  -p 8001:8001 -v ./data:/app/data  ghcr.io/rachelos/we-mp-rss:latest
-```
-http://<您的ip>:8001/  即可开启
+---
 
-# 快速升级 
+## 📢 更新说明
 
+本仓库克隆自 [https://github.com/rachelos/we-mp-rss](https://github.com/rachelos/we-mp-rss)，在原有功能基础上进行了以下改进：
+
+- ✅ **修复部分公众号不更新的问题**：优化了同步机制，提升了更新成功率
+- ✅ **添加更新报错提醒**：同步失败时自动发送通知，及时发现问题
+- ✅ **通知提醒支持多种方式**：支持企微群机器人、钉钉、飞书等多种通知渠道
+- ✅ **修复关键Bug**：修复了多个影响稳定性的关键问题
+
+---
+
+## 📮 联系方式
+
+如有问题或建议，请通过以下方式联系：
+
+- 创建 [GitHub Issue](https://github.com/okay456okay/nof1.ai.monitor/issues)
+- X (Twitter): [@okay456okay](https://x.com/okay456okay)
+- 微信公众号：远见拾贝
+- 网站: [远见拾贝 - 用远见洞察，赚确定性的钱](https://www.insightpearl.com/)
+
+<img src="https://github.com/okay456okay/nof1.ai.monitor/raw/main/images/InSightPearl21_qrcode.jpg" alt="远见拾贝公众号二维码" width="150" height="150">
+
+---
+
+## 快速运行
+
+```bash
+docker run -d --name we-mp-rss -p 8001:8001 -v ./data:/app/data ghcr.io/rachelos/we-mp-rss:latest
 ```
+
+访问 `http://<您的ip>:8001/` 即可开启
+
+## 快速升级
+
+```bash
 docker stop we-mp-rss
 docker rm we-mp-rss
 docker pull ghcr.io/rachelos/we-mp-rss:latest
 # 如果添加了其它参数，请自行修改
-docker run -d  --name we-mp-rss  -p 8001:8001 -v ./data:/app/data  ghcr.io/rachelos/we-mp-rss:latest
+docker run -d --name we-mp-rss -p 8001:8001 -v ./data:/app/data ghcr.io/rachelos/we-mp-rss:latest
 ```
 
-# 官方镜像
-```
-docker run -d  --name we-mp-rss  -p 8001:8001 -v ./data:/app/data  rachelos/we-mp-rss:latest
-```
-# 代理镜像加速访问（国内访问速度更快）
-```
-docker run -d  --name we-mp-rss  -p 8001:8001 -v ./data:/app/data  docker.1ms.run/rachelos/we-mp-rss:latest  
+## 官方镜像
+
+```bash
+docker run -d --name we-mp-rss -p 8001:8001 -v ./data:/app/data rachelos/we-mp-rss:latest
 ```
 
-# 感谢伙伴(排名不分先后)
- cyChaos、 子健MeLift、 晨阳、 童总、 胜宇、 军亮、 余光、 一路向北、 水煮土豆丝、 人可、 须臾、 澄明
-、五梭
+## 代理镜像加速访问（国内访问速度更快）
 
+```bash
+docker run -d --name we-mp-rss -p 8001:8001 -v ./data:/app/data docker.1ms.run/rachelos/we-mp-rss:latest
+```
 
+## 感谢伙伴（排名不分先后）
 
+cyChaos、子健MeLift、晨阳、童总、胜宇、军亮、余光、一路向北、水煮土豆丝、人可、须臾、澄明、五梭
 
- <br/>
- <img src="https://github.com/user-attachments/assets/cbe924f2-d8b0-48b0-814e-7c06ccb1911c" height="60" />
-    <img src="https://github.com/user-attachments/assets/6997a236-3df3-49d5-98a4-514f6d1a02c4" height="60" />
-    <br />
-    <br />
-    <a href="https://github.com/RSSNext/Folo/stargazers"><img src="https://img.shields.io/github/stars/RSSNext/Follow?color=ffcb47&labelColor=black&style=flat-square&logo=github&label=Stars" /></a>
-    <a href="https://github.com/RSSNext/Folo/graphs/contributors"><img src="https://img.shields.io/github/contributors/RSSNext/Folo?style=flat-square&logo=github&label=Contributors&labelColor=black" /></a>
-    <a href="https://status.follow.is/" target="_blank"><img src="https://status.follow.is/api/badge/18/uptime?color=%2344CC10&labelColor=black&style=flat-square"/></a>
-    <a href="https://github.com/RSSNext/Folo/releases"><img src="https://img.shields.io/github/downloads/RSSNext/Folo/total?color=369eff&labelColor=black&logo=github&style=flat-square&label=Downloads" /></a>
-    <a href="https://x.com/intent/follow?screen_name=folo_is"><img src="https://img.shields.io/badge/Follow-blue?color=1d9bf0&logo=x&labelColor=black&style=flat-square" /></a>
-    <a href="https://discord.gg/followapp" target="_blank"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2Ffollowapp%3Fwith_counts%3Dtrue&query=approximate_member_count&color=5865F2&label=Discord&labelColor=black&logo=discord&logoColor=white&style=flat-square"/></a>
-    <br />
 一个用于订阅和管理微信公众号内容的工具，提供RSS订阅功能。
-</div>
-<p align="center">
-  <a href="https://github.com/DIYgod/sponsors">
-    <img src="https://raw.githubusercontent.com/DIYgod/sponsors/main/sponsors.wide.svg" />
-  </a>
-</p>
 
 ## 功能特性
 
@@ -75,84 +85,112 @@ docker run -d  --name we-mp-rss  -p 8001:8001 -v ./data:/app/data  docker.1ms.ru
 - 支持导出md/docx/pdf/json格式
 - 支持API接口调用/WebHook调用
 
+## ❤️ 赞助
 
-# ❤️ 赞助
-如果觉得 We-MP-RSS 对你有帮助，欢迎给我来一杯啤酒！<br/>
-<img src="docs/赞赏码.jpg" width=180/>
+如果觉得 We-MP-RSS 对你有帮助，欢迎给我来一杯啤酒！
+
+<img src="docs/赞赏码.jpg" width="180" alt="赞赏码"/>
+
 [Paypal](https://www.paypal.com/ncp/payment/PUA72WYLAV5KW)
 
 ## 界面截图
-- 登录界面  
-<img src="docs/登录.png" alt="登录" width="80%"/><br/>
-- 主界面  
-<img src="docs/主界面.png" alt="主界面" width="80%"/><br/>
-- 扫码授权  
-<img src="docs/扫码授权.png" alt="扫码授权" width="80%"/><br/>
-- 添加订阅  
-<img src="docs/添加订阅.png" alt="添加订阅" width="80%"/><br/>
 
-- 客户端应用<br/>
-<img src="docs/folo.webp" alt="FOLO客户端应用" width="80%"/><br/>
+- **登录界面**
+
+<img src="docs/登录.png" alt="登录" width="80%"/>
+
+- **主界面**
+
+<img src="docs/主界面.png" alt="主界面" width="80%"/>
+
+- **扫码授权**
+
+<img src="docs/扫码授权.png" alt="扫码授权" width="80%"/>
+
+- **添加订阅**
+
+<img src="docs/添加订阅.png" alt="添加订阅" width="80%"/>
+
+- **客户端应用**
+
+<img src="docs/folo.webp" alt="FOLO客户端应用" width="80%"/>
 
 
 
 ## 系统架构
 
 项目采用前后端分离架构：
+
 - 后端：Python + FastAPI
 - 前端：Vue 3 + Vite
 - 数据库：SQLite (默认)/MySQL
+
 <img src="docs/架构原理.png" alt="架构原理" width="80%"/>
 
 更多项目原理，请参考[项目文档](https://deepwiki.com/rachelos/we-mp-rss/3.5-notification-system)。
 
 ## 安装指南
 
-# 二次开发
-## 环境需求
+### 二次开发
+
+#### 环境需求
+
 - Python>=3.13.1
 - Node>=20.18.3
-### 后端服务
+
+#### 后端服务
 
 1. 克隆项目
+
 ```bash
 git clone https://github.com/rachelos/we-mp-rss.git
 cd we-mp-rss
 ```
 
 2. 安装Python依赖
+
 ```bash
 pip install -r requirements.txt
 ```
 
 3. 配置数据库
+
 复制并修改配置文件：
+
 ```bash
 cp config.example.yaml config.yaml
+# Windows系统使用
 copy config.example.yaml config.yaml
 ```
-3. 启动服务
+
+4. 启动服务
+
 ```bash
 python main.py -job True -init True
 ```
 
-## 前端开发
+#### 前端开发
+
 1. 安装前端依赖
+
 ```bash
 cd we-mp-rss/web_ui
 yarn install
 ```
 
 2. 启动前端服务
+
 ```bash
 yarn dev
 ```
+
 3. 访问前端页面
+
 ```
 http://localhost:3000
 ```
 
-# 环境变量配置
+## 环境变量配置
 
 以下是 `config.yaml` 中支持的环境变量配置：
 
@@ -205,13 +243,13 @@ http://localhost:3000
 | `EXPORT_MARKDOWN` | `False` | 是否启用markdown导出功能 |
 | `EXPORT_MARKDOWN_DIR` | `./data/markdown` | markdown导出目录 |
 
-# 使用说明
+## 使用说明
 
 1. 启动服务后，访问 `http://<您的IP>:8001` 进入管理界面。
 2. 使用微信扫码授权后，即可添加和管理订阅。
 3. 定时任务会自动更新内容，并生成RSS订阅链接。
 
-# 常见问题
+## 常见问题
 
 - **如何修改数据库连接？**
   在 `config.yaml` 中修改 `db` 配置项，或通过环境变量 `DB` 覆盖。
